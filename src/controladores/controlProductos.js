@@ -1,29 +1,65 @@
+const m_productos = require("../modelos/m-producto")
+
 module.exports = {
 
-    leerProductos : (req, res)=>{
-        res.json({
-            mensaje: "todos los productos"
-        })
+    leerProductos : async (req, res)=>{
+        try{
+            let productos = await m_productos.find()
+            res.json({
+                productos
+            })
+        }catch(error){
+            res.json({mensaje:"error: "+error})
+        }
     },
 
-    crearProductos : (req,res)=>{
-        res.json({
-            mensaje:"api/productos post exportando un json"
-        })
+    crearProductos : async(req,res)=>{
+        let producto = new m_productos(
+            {
+                nombre: req.body.nombre,
+                precio: req.body.precio,
+                cant: req.body.cant
+            }
+        )
+        try{
+            const n_p = await producto.save()
+            res.json({
+                producto:n_p
+            })
+        }catch(error){
+            res.json({mensaje: "error al crear:"+ error})
+        }
     },
 
-    editProductos : (req,res)=>{
+    editProductos : async (req,res)=>{
         let id = req.params.id
-        res.json({
-            mensaje:" para editar un producto"+id
-        })
+        try{
+            const editado = m_productos.findByIdAndUpdate(id,
+                {
+                    nombre: req.body.nombre,
+                    precio: req.body.precio,
+                    cant: req.body.cant
+                },
+                {new:true})
+            res.json({data: editado})
+        }catch(error){
+            res.json({error:"error al editar:"+error})
+        }
     },
 
-    borrarProductos : (req,res)=>{
+    borrarProductos : async (req,res)=>{
         let id = req.params.id
-        res.json({
-            mensaje:" borrar un producto " +id
-        })
+        try{
+            await m_productos.findByIdAndDelete(id)
+            res.json({mensaje: "producto ID:"+id+" borrado"})
+        }catch(error){
+            res.json({
+                mensaje:"error:"+error
+            })
+        }
     }
 
 }
+
+
+//res.json({mensaje:})
