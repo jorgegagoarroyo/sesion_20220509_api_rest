@@ -1,6 +1,8 @@
 const express = require("express")
 const app = express()
 
+const morgan = require("morgan")
+
 const rutaUsuarios = require("./src/rutas/rutaUsuario")
 const rutaProductos = require("./src/rutas/rutaProductos")
 
@@ -12,6 +14,8 @@ db.on("connected", ()=>{
     console.log("la base de datos esta conectada")
 })
 
+
+app.use(morgan("combined"))
 
 //Middleware para la codificación json del cuerpo de las peticiones (body)
 app.use(express.json());

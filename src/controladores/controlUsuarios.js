@@ -16,18 +16,54 @@ module.exports = {
         // })   
     },
 
-    crearUsuario : (req,res)=>{
+    crearUsuario : async (req, res)=>{
+        const usuario = new m_usuario({
+            nombre: req.body.nombre,
+            apellidos: req.body.apellidos,
+            email: req.body.email
+        })
+        try{
+            const usuarioGuardado = await usuario.save()
+            res.json({
+                error:null,
+                data:usuarioGuardado
+            })
+        }catch{
+            res.status(400).json({error})
+        }
         // res.json({
         //     mensaje:"api/usuarios post exportando un json"
         // })
     },
 
-    editUsuarioId : (req,res)=>{
-        let id = req.params.id
-        res.json({
-            mensaje:" para editar un usuario id:"+id
-        })
-    },
+    editUsuarioId : async (req, res)=>{
+        var id = req.params.id
+        try{
+            var usuario = await m_usuario.findByIdAndUpdate(id,
+                {
+                    nombre: req.body.nombre,
+                    apellidos: req.body.apellidos,
+                    email: req.body.email
+                },
+                {new:true}    
+            )
+            res.json({
+                error:null,
+                data: usuario
+            })
+        }catch(error){
+            res.send("error "+error)
+        }
+
+    }
+    
+    
+    //(req,res)=>{
+    //     let id = req.params.id
+    //     res.json({
+    //         mensaje:" para editar un usuario id:"+id
+    //     })
+    ,
 
     borrarUsuarioId : async (req,res)=>{
         let id = req.params.id
