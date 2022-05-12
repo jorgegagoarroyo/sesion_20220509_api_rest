@@ -33,19 +33,21 @@ module.exports = {
 
     editProductos : async (req,res)=>{
         var id = req.params.id
+        
         try{
-            const editado = m_productos.findByIdAndUpdate(id,
+            const editado = await m_productos.findByIdAndUpdate(id,
                 {
                     nombre: req.body.nombre,
                     precio: req.body.precio,
                     cant: req.body.cant
-                }
+                },
+                {new:true}
                 )
             res.json({
                 error:null,
                 data: editado})
         }catch(error){
-            res.json({error:"error al editar:"+error})
+            res.json({error:"error al editar:  "+error})
         }
     },
 

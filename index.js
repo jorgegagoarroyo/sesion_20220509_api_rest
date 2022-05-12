@@ -1,6 +1,9 @@
 const express = require("express")
 const app = express()
 
+const cors = require("cors")
+app.use(cors())
+
 const morgan = require("morgan")
 
 const rutaUsuarios = require("./src/rutas/rutaUsuario")
